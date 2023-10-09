@@ -4,35 +4,35 @@ require 'httparty'
 namespace :scrape_urhouse do
   desc 'Scrape data from UrHouse website'
   task :fetch_properties => :environment do
-
     url = 'https://www.urhouse.com.tw/en/rentals'
-    browser = Watir::Browser.new
-    browser.goto url
+    response = HTTParty.get(url)
 
-    db_properties = []
+    if response.success?
+      html = Nokogiri::HTML(response.body)
+      properties = []
 
-    loop do
-      properties = browser.elements(css: '.c-products__item').wait_until(&:present?)
-      properties.each do |property|
-        property = Nokogiri::HTML(property.html)
+      # Modify the following code based on the HTML structure of the website
+      debugger
+      html.css('.property-item').each do |property_element|
+        property = {
+          title: property_element.css('.property-title').text.strip,
+          price_per_month: property_element.css('.property-price').text.strip.to_i,
+          address: property_element.css('.property-address').text.strip,
+          number_of_rooms: property_element.css('.property-rooms').text.strip.to_i,
+          mrt: property_element.css('.property-mrt').text.strip
+        }
 
-        price_per_month = property.css('.card-body_price span span h4').text.gsub(',', '').to_i
-        title = property.css('.card-body_title h5').text
-        address = property.css('.card-body_title p').text
-        mrt = property.css('.card-body_item div')[1].text.split("\n")[0]
-        number_of_rooms = property.css('.card-body_item div').first.css('span').last.text&.to_i
-        db_properties << Property.new(title: title, address: address, price_per_month: price_per_month, number_of_rooms: number_of_rooms, mrt: mrt)
+        properties << property
       end
 
-      next_button = browser.element(css: '.pagination .fa-forward')
-      break if next_button.parent.class_name.include?("disabled")
-      # browser.elements(css: '.pagination .fa-forward').wait_until(&:present?)
-      Watir::Wait.until { next_button.present? && next_button.enabled? }
-      next_button.click
-      sleep 2
-    end
+      # Save properties to the database
+      properties.each do |property_params|
+        Property.create(property_params)
+      end
 
-    Property.import db_properties
-    browser.close
+      puts "#{properties.size} properties scraped and saved to the database."
+    else
+      puts "Failed to fetch data from #{url}. HTTP Status: #{response.code}"
+    end
   end
 end

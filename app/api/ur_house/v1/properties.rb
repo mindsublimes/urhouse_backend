@@ -18,8 +18,8 @@ module UrHouse
         end
         get do
           begin
-            properties = Property.page(params[:page]).per(params[:per_page])
-            present properties
+            properties = Property.order(:id).page(params[:page]).per(params[:per_page])
+            present properties.as_json
           rescue StandardError => e
             error!({ error: "Failed to fetch properties. #{e.message}" }, 500)
           end
@@ -106,7 +106,7 @@ module UrHouse
         end
 
         def find_property
-          @property = Property.find params[:id]
+          @property = Property.find_by id: params[:id]
         rescue ActiveRecord::RecordNotFound
           error!({ error: 'Property not found' }, 404)
         end

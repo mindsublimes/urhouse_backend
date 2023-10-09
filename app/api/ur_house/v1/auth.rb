@@ -38,7 +38,7 @@ module UrHouse
           user = User.find_for_authentication(email: user_params[:email])
 
           if user && user.valid_password?(user_params[:password])
-            { message: 'Signin successful', email: user.email, role: user.role, authentication_token: user.authentication_token }
+            { message: 'Signup successful', email: user.email, role: user.role, authentication_token: user.authentication_token }
           else
             error!('Invalid email or password', 401)
           end

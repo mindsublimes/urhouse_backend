@@ -25,7 +25,6 @@ module UrHouse
           properties = Property.page(params[:page]).per(params[:per_page])
           conditions = []
           values = {}
-
           if search_params[:title]
             conditions << "title ILIKE :title"
             values[:title] = "%#{search_params[:title]}%"
@@ -50,7 +49,7 @@ module UrHouse
             conditions << "mrt ILIKE :mrt"
             values[:mrt] = "%#{search_params[:mrt]}%"
           end
-          
+          debugger
           properties.where(conditions.join(' AND '), values)
         end
       end

@@ -11,12 +11,9 @@ gem 'grape_on_rails_routes'
 gem 'devise'
 gem 'kaminari'
 
-
 gem 'nokogiri'
 gem 'httparty'
-gem "watir-rails"
-gem 'activerecord-import'
-
+gem 'rack-cors', require: 'rack/cors'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
@@ -63,7 +60,6 @@ gem "bootsnap", require: false
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
-   gem 'rspec-rails'
 end
 
 group :development do

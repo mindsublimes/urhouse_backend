@@ -1,5 +1,15 @@
 class Property < ApplicationRecord
-
-  has_many :favorite_lists
-  has_many :users, through: :favorite_lists
+    has_one :favorite_list
+  
+    # your other code...
+  
+    def favourite?
+      self.favorite_list.present?
+    end
+  
+    def as_json(options = {})
+      super(options).merge({
+        favourite: self.favourite?
+      })
+    end
 end

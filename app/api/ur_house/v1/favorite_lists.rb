@@ -15,11 +15,17 @@ module UrHouse
           requires :property_id, type: Integer, desc: 'Property ID to be added to favorite list'
         end
         post do
-          favorite = FavoriteList.new(user: @current_user, property_id: params[:property_id])
-          if favorite.save
-            { message: 'Property added to favorites' }
+          favorite = FavoriteList.where(user_id: @current_user, property_id: params[:property_id]).first
+          if favorite
+            favorite.destroy
+            { message: 'Property removed to favorites' }
           else
-            error!({ errors: favorite.errors.full_messages }, 422)
+            favorite = FavoriteList.new(user: @current_user, property_id: params[:property_id])
+            if favorite.save
+              { message: 'Property added to favorites' }
+            else
+              error!({ errors: favorite.errors.full_messages }, 422)
+            end
           end
         end
 

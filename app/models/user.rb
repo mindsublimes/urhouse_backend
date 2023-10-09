@@ -8,10 +8,9 @@ class User < ApplicationRecord
 
   before_create :set_default_role, :ensure_authentication_token
 
-  has_many :favorite_lists
-  has_many :properties, through: :favorite_lists
-
   validates :role, inclusion: { in: roles.keys }
+
+  has_many :favorite_lists
 
   private
 
