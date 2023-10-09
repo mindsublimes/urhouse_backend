@@ -22,7 +22,6 @@ module UrHouse
         post 'search' do
           search_params = declared(params, include_missing: false)[:search] || {}
 
-          properties = Property.page(params[:page]).per(params[:per_page])
           conditions = []
           values = {}
           if search_params[:title]
@@ -49,7 +48,8 @@ module UrHouse
             conditions << "mrt ILIKE :mrt"
             values[:mrt] = "%#{search_params[:mrt]}%"
           end
-          properties.where(conditions.join(' OR '), values)
+          properties = Property.where(conditions.join(' AND '), values)
+          present properties
         end
       end
     end
