@@ -49,7 +49,6 @@ module UrHouse
             conditions << "mrt ILIKE :mrt"
             values[:mrt] = "%#{search_params[:mrt]}%"
           end
-          debugger
           properties.where(conditions.join(' OR '), values)
         end
       end
