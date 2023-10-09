@@ -50,7 +50,7 @@ module UrHouse
             values[:mrt] = "%#{search_params[:mrt]}%"
           end
           debugger
-          properties.where(conditions.join(' AND '), values)
+          properties.where(conditions.join(' OR '), values)
         end
       end
     end

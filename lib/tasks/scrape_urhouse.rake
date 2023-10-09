@@ -12,7 +12,6 @@ namespace :scrape_urhouse do
       properties = []
 
       # Modify the following code based on the HTML structure of the website
-      debugger
       html.css('.property-item').each do |property_element|
         property = {
           title: property_element.css('.property-title').text.strip,
