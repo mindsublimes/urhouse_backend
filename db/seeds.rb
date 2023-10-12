@@ -24,3 +24,8 @@ properties = [
 properties.each do |property|
   Property.create!(property)
 end
+
+
+
+User.create(email: 'admin@gmail.com', password: '123456', password_confirmation: '123456', role: 'admin')
+User.create(email: 'user@gmail.com', password: '123456', password_confirmation: '123456', role: 'user')

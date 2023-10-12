@@ -24,5 +24,3 @@ default: &default
 development:
   <<: *default
   database: urhouse_backend
-  username: devuser
-  password: '123456'
